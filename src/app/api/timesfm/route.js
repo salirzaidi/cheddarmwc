@@ -20,7 +20,6 @@ export async function POST(req) {
 
     const client = await auth.getClient();
 
-    // ✅ **Correct Payload: Ensure it's a list of pure numeric values**
     const payload = {
       instances: [
         {
