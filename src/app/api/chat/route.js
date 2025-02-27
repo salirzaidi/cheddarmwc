@@ -1,5 +1,6 @@
 import { createVertex } from '@ai-sdk/google-vertex';
-import { streamText } from 'ai';
+import { streamText,generateObject } from 'ai';
+import { z } from 'zod';
 
 export const maxDuration = 30; // Allow up to 30s streaming
 
@@ -17,6 +18,8 @@ export async function POST(req) {
       model: vertex('gemini-2.0-flash-001'),
       messages,
     });
+
+
 
     return result.toDataStreamResponse(); // Streaming response for useChat
 

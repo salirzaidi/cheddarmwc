@@ -24,7 +24,8 @@ export async function POST(req) {
       instances: [
         {
           input: timeSeriesData, // Directly send as numeric array
-          prediction_steps: predictionSteps || 5,
+          prediction_steps: 5,
+          horizon_len: 5,
         },
       ],
     };

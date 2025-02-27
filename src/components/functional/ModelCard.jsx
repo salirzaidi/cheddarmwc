@@ -15,7 +15,7 @@ import { Canvas } from '@react-three/fiber'
 import MacStatsChart from "./MacStatsChart"
 
 
-export function CardDemo({ className, ...props }) {
+export function CardGraph({onExtractData, attribute,className, ...props }) {
   return (
     <Card className={cn("w-[35vw]", className, )} {...props}>
       <CardHeader>
@@ -23,7 +23,6 @@ export function CardDemo({ className, ...props }) {
         <CardDescription>Downlink PRBs</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-      <MacStatsChart attribute="ul_aggr_prb" />
       </CardContent>
       <CardFooter>
        

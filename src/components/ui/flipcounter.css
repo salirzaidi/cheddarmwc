@@ -1,0 +1,42 @@
+.flipCounter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+  }
+  
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .flip {
+    display: inline-block;
+    font-size: 55px;
+    font-weight: bold;
+    position: relative;
+  }
+  
+  .number {
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .number:before {
+    content: attr(data-value);
+    display: block;
+  }
+  
+  .number {
+    transform: rotateX(180deg);
+  }
+  
+  .number {
+    transform: rotateX(0deg);
+  }
+  

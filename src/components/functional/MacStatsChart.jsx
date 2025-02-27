@@ -1,17 +1,28 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import ReactECharts from "echarts-for-react";
 import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import {CollapsiblePre} from '@/components/ui/collapsiblepre';
+import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const MacStatsChart = ({ attribute }) => {
+const MacStatsChart = ({ attribute,onExtractData,className,...props  }) => {
   const { data, error } = useSWR("/api/macstats", fetcher, {
     refreshInterval: 1000, // Poll every second
   });
+
+  
 
   const [chartData, setChartData] = useState({});
   const [selectedData, setSelectedData] = useState([]);
@@ -22,12 +33,24 @@ const MacStatsChart = ({ attribute }) => {
     const echartInstance = chartRef.current?.getEchartsInstance();
     if (echartInstance) {
       const zoom = echartInstance.getOption().dataZoom[0];
-      const startIdx = Math.floor((zoom.start / 100) * chartData.length);
-      const endIdx = Math.floor((zoom.end / 100) * chartData.length);
-      setSelectedData(chartData);
-      //console.log("Extracted Data:", JSON.stringify(chartData));
+  
+      // Determine start and end indices based on zoom percentage
+      const startRatio = zoom.start / 100;
+      const endRatio = zoom.end / 100;
+  
+      // Extract data for each RNTI separately
+      const extractedData = Object.entries(chartData).reduce((acc, [rnti_mac, series]) => {
+        const startIdx = Math.floor(startRatio * series.length);
+        const endIdx = Math.floor(endRatio * series.length);
+        acc[rnti_mac] = series.slice(startIdx, endIdx);
+        return acc;
+      }, {});
+  
+      setSelectedData(extractedData);
+      onExtractData(extractedData); // Pass extracted data to parent
     }
   };
+  
 
   const detectBreakpoints = (values) => {
     const breakpoints = [];
@@ -83,6 +106,7 @@ const MacStatsChart = ({ attribute }) => {
       });
       setChartData(groupedData);
       setBreakpoints(breakpointData);
+      
     
     }
   }, [data, attribute]);
@@ -110,6 +134,17 @@ const MacStatsChart = ({ attribute }) => {
 
   const getChartOptions = () => {
     const colorArray = ["#6ed0ad", "#7a78e6", "#f78da7", "#cf2e2e", "#9b51e0"];
+
+const rntiColors = { }; // Load existing colors
+
+Object.keys(chartData).forEach((rnti, index) => {
+  if (!rntiColors[rnti]) {
+    rntiColors[rnti] = colorArray[index % colorArray.length]; // Assign new color if missing
+  }
+});
+
+// Save updated colors back to localStorage
+localStorage.setItem("rntiColors", JSON.stringify(rntiColors));
     const storedZoomStart = localStorage.getItem("zoomStart") || 0;
     const storedZoomEnd = localStorage.getItem("zoomEnd") || 100;
   
@@ -160,7 +195,7 @@ const MacStatsChart = ({ attribute }) => {
       },
       series:[ 
       ...Object.entries(chartData).map(([rnti_mac, seriesData], index) => {
-        const lineColor = colorArray[index % colorArray.length]; // Get a color from the array
+        const lineColor = rntiColors[rnti_mac]; // Get a color from the array
   
         return {
           name: `RNTI ${rnti_mac}`,
@@ -224,11 +259,12 @@ const MacStatsChart = ({ attribute }) => {
     dataZoom:(params)=>{handleZoomChange(params)},
   };
   return (
-  <div>
+  
 
+      <div>   
   <ReactECharts ref={chartRef} option={getChartOptions()} style={{ marginLeft:"10px",height: "48.6vh", width:"30vw" }} onEvents={onChartEvents}/>
   <div style={{ display: "flex",flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "10px", marginLeft:"auto" }}>
-  <Button onClick={extractSelection} className="bg-violet-800">Extract Selected Data</Button>
+  <Button onClick={extractSelection} className="bg-indigo-900 text-xl">Extract Selected Data</Button>
 
 {Object.keys(selectedData).length >0 
   && (
@@ -236,7 +272,8 @@ const MacStatsChart = ({ attribute }) => {
 <CollapsiblePre  style= {{marginLeft:0}}jsonData= {JSON.stringify(selectedData, null, 2)}></CollapsiblePre>
 )}
 </div>
-</div>);
+</div>
+);
 };
 
 export default MacStatsChart;
