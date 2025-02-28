@@ -50,7 +50,7 @@ const WeatherCard = () => {
   if (!weather) return <p>Failed to load weather data.</p>;
 
   return (
-    <Card className="w-full rounded-2xl bg-gradient-to-br from-indigo-800 to-teal-500 p-6 shadow-xl text-white">
+    <Card className="w-full rounded-2xl  bg-gradient-to-br from-zinc-800 to-indigo-500 p-6 shadow-xl text-white">
        <CardHeader className="text-center">
         <CardTitle className="text-xl font-semibold">{weather?.city}</CardTitle>
       </CardHeader>

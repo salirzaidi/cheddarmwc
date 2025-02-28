@@ -1,5 +1,5 @@
 import { createVertex } from '@ai-sdk/google-vertex';
-import { streamText,generateObject } from 'ai';
+import { streamText,generateObject,tool } from 'ai';
 import { z } from 'zod';
 
 export const maxDuration = 30; // Allow up to 30s streaming
@@ -17,6 +17,20 @@ export async function POST(req) {
     const result = streamText({
       model: vertex('gemini-2.0-flash-001'),
       messages,
+      tools: {
+        weather: tool({
+          description: 'Perform time series analysis for anomaly detection',
+          parameters: z.object({
+            data: z.string().describe('The data on which analysis is to be performed'),
+          }),
+          execute: async ({ data }) => {
+            const anomaly = Math.round(Math.random() * (90 - 32) + 32);
+            return {
+              anomaly,
+            };
+          },
+        }),
+      },
     });
 
 
