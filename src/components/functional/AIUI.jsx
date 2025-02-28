@@ -1,8 +1,21 @@
 import { useChat } from "@ai-sdk/react";
 import { useRef, useEffect, forwardRef, useImperativeHandle, useState } from "react";
+import { TimeSeriesUI } from "./TimeSerieUI";
+import { ToolInvocation } from 'ai';
 
-const AIUI = forwardRef(({ prompt, onSubmit, data }, ref) => {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+
+const AIUI = forwardRef(({ prompt, onSubmit, data, extractedData }, ref) => {
+  const [chart, setChart] = useState(false);
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    maxSteps: 5,
+
+    async onToolCall({ toolCall }) {
+      if (toolCall.toolName === 'anomal') {
+        setChart(true);
+        return "Ali";
+      }
+    },
+  });
   const hiddenSubmitButtonRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,7 +55,14 @@ const AIUI = forwardRef(({ prompt, onSubmit, data }, ref) => {
 (m.content.indexOf("[{") !== -1) ? "Data and Prompt submitted.":m.content        
           }
           {m.toolInvocations ? (
+            <>
             <pre>{JSON.stringify(m.toolInvocations, null, 2)}</pre>
+            <pre>{m.toolInvocations.toolName}</pre>
+            </>
+             
+              
+            
+            
           ) : (
             <p>{(m.content.indexOf("[{") !== -1) ? "Data and Prompt submitted.":m.content}</p>
           )}
@@ -60,6 +80,8 @@ const AIUI = forwardRef(({ prompt, onSubmit, data }, ref) => {
         {/* Hidden submit button */}
         <button ref={hiddenSubmitButtonRef} type="submit" style={{ display: "none" }} />
       </form>
+
+     {chart?<TimeSeriesUI extractedData={extractedData}></TimeSeriesUI>: <div>No Interactive Tool</div>}
     </div>
   );
 });

@@ -18,13 +18,14 @@ export async function POST(req) {
       model: vertex('gemini-2.0-flash-001'),
       messages,
       tools: {
-        weather: tool({
+        anomal: tool({
           description: 'Perform time series analysis for anomaly detection',
           parameters: z.object({
             data: z.string().describe('The data on which analysis is to be performed'),
           }),
           execute: async ({ data }) => {
             const anomaly = Math.round(Math.random() * (90 - 32) + 32);
+            
             return {
               anomaly,
             };

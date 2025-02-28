@@ -390,7 +390,7 @@ export default function Home() {
                   </TabsList>
                 </div>
                 <TabsContent value="downlink" className="flex-1 flex flex-col">
-                <AIUI ref={aiUIRef} prompt={prompt} onSubmit={handleSubmit} data={data} />
+                <AIUI ref={aiUIRef} prompt={prompt} onSubmit={handleSubmit} data={data} extractedData={extractedData} />
 
                 </TabsContent>
                 <TabsContent value="uplink" className="flex-1 flex flex-col">
