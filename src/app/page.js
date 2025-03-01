@@ -5,7 +5,7 @@ import Link from 'next/link';
 import MacStatsChart from '@/components/functional/MacStatsChart';
 import  AIUI  from '@/components/functional/AIUI';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
+import CodeGenUI from '@/components/functional/CodeGenUI';
 import { useCallback, useEffect, useState , useRef } from "react";
 import { TimeSeriesUI } from '@/components/functional/TimeSerieUI';
 import TestComp from '@/components/functional/TestComp';
@@ -25,7 +25,6 @@ import SoundLevelVisualizer from '@/components/functional/SoundLevel';
 import LocationCard from '@/components/ui/locationcard';
 import CurrentTimeCard from '@/components/ui/time';
 import BreakpointBarGraph from '@/components/ui/flip';
-import { GemUI } from '@/components/functional/GeminiAI';
 
 export default function Home() {
 
@@ -391,7 +390,7 @@ export default function Home() {
                 </div>
                 <TabsContent value="downlink" className="flex-1 flex flex-col">
                 <AIUI ref={aiUIRef} prompt={prompt} onSubmit={handleSubmit} data={data} extractedData={extractedData} />
-
+<CodeGenUI></CodeGenUI>
                 </TabsContent>
                 <TabsContent value="uplink" className="flex-1 flex flex-col">
                   
