@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const API_KEY = "e621ca50d556d9e5b230c315bf419163w"; // 
+const API_KEY = "e621ca50d556d9e5b230c315bf419163"; // 
 const CITY = "Barcelona";
 
 const WeatherCard = () => {

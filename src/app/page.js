@@ -380,22 +380,8 @@ export default function Home() {
 
 
             <Card className="flex flex-col h-full col-span-2">
-              <Tabs defaultValue="downlink" className="w-[36vw]">
-                <div className="flex items-center justify-between px-4 py-2 ">
-
-                  <TabsList>
-                    <TabsTrigger value="downlink" >Downlink</TabsTrigger>
-                    <TabsTrigger value="uplink">Uplink</TabsTrigger>
-                  </TabsList>
-                </div>
-                <TabsContent value="downlink" className="flex-1 flex flex-col">
-                <AIUI ref={aiUIRef} prompt={prompt} onSubmit={handleSubmit} data={data} extractedData={extractedData} />
-<CodeGenUI></CodeGenUI>
-                </TabsContent>
-                <TabsContent value="uplink" className="flex-1 flex flex-col">
-                  
-                </TabsContent>
-              </Tabs>
+            <AIUI ref={aiUIRef} prompt={prompt} onSubmit={handleSubmit} data={data} extractedData={extractedData} className="col-span-2" />
+             
             </Card>
           </div>
 

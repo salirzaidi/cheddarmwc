@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleAction, ChatBubbleActionWrapper } from '@/components/ui/chat/chat-bubble';
+import { ChatMessageList } from '@/components/ui/chat/chat-message-list';
 
 const GenUI = forwardRef(({ promptnew, data }, ref) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,20 +80,28 @@ const GenUI = forwardRef(({ promptnew, data }, ref) => {
   };
 
   return (
-    <Card className="flex flex-col w-full max-w-md py-24 mx-auto">
+    <Card className="flex flex-col w-full ">
       <CardHeader>
         <CardTitle>AI Predictions</CardTitle>
       </CardHeader>
 
       <CardContent>
         <div className="space-y-4">
+        
+          <ChatMessageList>
           {messages.map((m) => (
+            
             <div key={m.id} className="whitespace-pre-wrap">
-              {m.role === 'user' ? 'User: ' : 'AI: '}
+                <ChatBubble variant={m.role === "user" ? "sent" : "received"}>
+          <ChatBubbleAvatar src="" fallback={m.role === "user" ? "👨🏽" : "🤖"} />
+          <ChatBubbleMessage>
+            
               {m.content}
-           
+              </ChatBubbleMessage>
+              </ChatBubble>
             </div>
           ))}
+           </ChatMessageList>
         </div>
 
         {/* Render the means as cards if available */}
@@ -113,7 +123,7 @@ const GenUI = forwardRef(({ promptnew, data }, ref) => {
           <input
             value={input}
             placeholder="Say something..."
-            onChange={handleInputChange}
+            onChange={handleInputChange} className="hidden"
           />
 
           {/* Hidden submit button */}
